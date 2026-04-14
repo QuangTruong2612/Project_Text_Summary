@@ -1,0 +1,2 @@
+COLUMNS_NOT_USE: ["URL", "Tags", "Author(s)", "Date"]
+COMBINED_COLUMNS: ["Title", "Contents", "Category"]

@@ -1,1 +1,1 @@
-from news_config import SITE_CONFIGS
+from .news_config import SITE_CONFIGS

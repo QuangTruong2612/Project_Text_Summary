@@ -1,0 +1,6 @@
+artifacts_root: artifacts
+
+processed_data:
+  root_dir: artifacts/processed_data
+  data_file: data/Dataset_articles_NoID.csv
+  processed_data_file: artifacts/processed_data/processed_data.csv

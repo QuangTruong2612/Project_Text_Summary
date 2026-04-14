@@ -19,3 +19,11 @@ trafilatura==1.8.1
 beautifulsoup4==4.12.3
 requests==2.32.3
 newspaper3k==0.2.8
+PyYAML
+boxsdk
+types-PyYAML
+ensure==1.0.2
+python-box==6.0.2
+scipy
+
+-e .
