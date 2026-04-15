@@ -3,4 +3,10 @@ artifacts_root: artifacts
 processed_data:
   root_dir: artifacts/processed_data
   data_file: data/Dataset_articles_NoID.csv
-  processed_data_file: artifacts/processed_data/processed_data.csv
+  train_data_file: artifacts/processed_data/train_data.csv
+  test_data_file: artifacts/processed_data/test_data.csv
+
+training_model:
+  root_dir: artifacts/training
+  data_file: artifacts/processed_data/train_data.csv
+  save_path: artifacts/training

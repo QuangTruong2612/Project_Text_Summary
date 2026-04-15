@@ -4,6 +4,7 @@ import urllib.parse
 
 from config import SITE_CONFIGS
 
+
 class CrawlNews:
     def __init__(self):
         self.news_config = SITE_CONFIGS

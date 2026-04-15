@@ -40,5 +40,20 @@ class ProcessedData:
 
     @staticmethod
     def save_data(self, data: pd.DataFrame):
-        return data.to_csv(self.config.processed_data_file, index=False)
+        try:
+            train_size, test_size = self.config.split_data
+            
+            data_size = len(data)
+            split_index = int(train_size * data_size)
+            train_data = data[:split_index]
+            test_data = data[split_index:]
 
+            train_data.to_csv(self.config.train_data_file, index=False)
+            logger.info(f"Save file train data completed! Name file: {self.config.train_data_file}")
+
+            test_data.to_csv(self.config.test_data_file, index=False)
+            logger.info(f"Save file test data completed! Name file: {self.config.test_data_file}")
+
+        except Exception as e:
+            logger.debug(f"Error: {e}")
+            raise e

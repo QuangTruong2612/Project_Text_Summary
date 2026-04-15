@@ -1,6 +1,10 @@
-data/
-.venv/
 __pycache__/
+/data
+/.aws
+*.log
+*.env
+*.pyc
+.vscode/
+artifacts/*
 Project_Text_Summary.egg-info/
-
-research/
+.venv/
