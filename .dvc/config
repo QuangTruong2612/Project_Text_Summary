@@ -1,0 +1,4 @@
+[core]
+    remote = mydata
+['remote "mydata"']
+    url = s3://project-summary-bucket/data

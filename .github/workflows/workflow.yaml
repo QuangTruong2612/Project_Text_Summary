@@ -1,0 +1,64 @@
+name: workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  training-job:
+    runs-on: [self-hosted, gpu-runner]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Environment $ Pull data $ Training Model
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
+          MLFLOW_TRACKING_REPO: ${{ secrets.MLFLOW_TRACKING_REPO }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          dvc pull --allow-missing
+          python main.py
+
+  deploy-job:
+    needs: training-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deloy to AWS EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: 22
+
+          script: |
+            cd /home/ubuntu/Project_Text_Summary
+            git pull origin main
+            mv DockerFile Dockerfile
+            docker build -t my-web-app .
+            docker stop web-container || true
+            docker rm web-container || true
+            docker run -d \
+              --name web-container \
+              --restart always \
+              -p 8080:8080 \
+              -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
+              -e MLFLOW_TRACKING_USERNAME=${{ secrets.MLFLOW_TRACKING_USERNAME }} \
+              -e MLFLOW_TRACKING_REPO=${{ secrets.MLFLOW_TRACKING_REPO }} \
+              -e MLFLOW_TRACKING_PASSWORD=${{ secrets.MLFLOW_TRACKING_PASSWORD }} \
+              my-web-app

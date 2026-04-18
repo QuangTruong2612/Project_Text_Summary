@@ -1,7 +1,8 @@
 import os
 from src.entity.config_entity import (
     DataProcessedConfig,
-    TrainingModelConfig
+    TrainingModelConfig,
+    EvaluationModelConfig
 )
 from src.utils import read_yaml, create_directories
 from pathlib import Path
@@ -37,7 +38,8 @@ class ConfigurationManager:
         return TrainingModelConfig(
             root_dir=Path(config.root_dir),
             data_file= Path(config.data_file),
-            save_path= Path(config.save_path),
+            save_model_path= Path(config.save_model_path),
+            save_tokenizer_path=Path(config.save_tokenizer_path),
             # params
             model_name=self.params.MODEL_NAME,
             model_checkpoint=self.params.MODEL_CHECKPOINT,
@@ -54,3 +56,16 @@ class ConfigurationManager:
             repo_owner=self.repo_owner,
         )
 
+    def get_evaluation_model_config(self) -> EvaluationModelConfig:
+        config = self.config.evaluation_model
+        create_directories([config.root_dir])
+        return EvaluationModelConfig(
+            root_dir=Path(config.root_dir),
+            test_file=Path(config.test_file),
+            model_path=Path(config.model_path),
+            tokenizer_path=Path(config.tokenizer_path),
+            model_name=self.params.MODEL_NAME,
+            device=self.params.DEVICE,
+            repo_name=self.repo_name,
+            repo_owner=self.repo_owner
+        )

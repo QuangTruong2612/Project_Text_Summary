@@ -1,7 +1,7 @@
 COLUMNS_NOT_USE: ["URL", "Tags", "Author(s)", "Date"]
 COMBINED_COLUMNS: ["Title", "Contents", "Category"]
 
-MODEL_NAME: "Long Transformer Encoder-Decoder"
+MODEL_NAME: "Long_Transformer_Encoder_Decoder"
 MODEL_CHECKPOINT: "allenai/led-base-16384"
 
 # Params training model

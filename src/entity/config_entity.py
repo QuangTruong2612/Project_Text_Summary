@@ -14,7 +14,8 @@ class DataProcessedConfig:
 class TrainingModelConfig:
     root_dir: Path
     data_file: Path
-    save_path: Path
+    save_model_path: Path
+    save_tokenizer_path: Path
 
     model_name: str
     model_checkpoint: str
@@ -30,3 +31,15 @@ class TrainingModelConfig:
     repo_name: str
     repo_owner: str
     
+@dataclass(frozen=True)
+class EvaluationModelConfig:
+    root_dir: Path
+    test_file: Path
+    model_path: Path
+    tokenizer_path: Path
+    model_name: str 
+
+    device: str
+
+    repo_name: str
+    repo_owner: str

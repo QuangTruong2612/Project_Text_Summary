@@ -9,4 +9,11 @@ processed_data:
 training_model:
   root_dir: artifacts/training
   data_file: artifacts/processed_data/train_data.csv
-  save_path: artifacts/training
+  save_model_path: artifacts/training/model
+  save_tokenizer_path: artifacts/training/tokenizer
+
+evaluation_model:
+  root_dir: artifacts/evaluation
+  test_file: artifacts/processed_data/test_data.csv
+  model_path: artifacts/training/model
+  tokenizer_path: artifacts/training/tokenizer
