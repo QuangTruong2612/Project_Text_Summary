@@ -29,6 +29,8 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
           echo "Bắt đầu tạo môi trường ảo và cài đặt thư viện..."
+          echo "Xóa môi trường cũ cho sạch..."
+          rm -rf venv
           python3 -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
