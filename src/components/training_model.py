@@ -69,7 +69,7 @@ class TrainingModel:
             training_args = Seq2SeqTrainingArguments(
                 output_dir="./results_summary",
                 eval_strategy="epoch",
-                learning_rate=self.config.learning_rate,
+                learning_rate=float(self.config.learning_rate),
                 logging_strategy="steps",
                 logging_steps=10,
                 per_device_train_batch_size=self.config.train_batch,
