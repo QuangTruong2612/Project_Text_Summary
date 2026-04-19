@@ -9,6 +9,7 @@ sentence-transformers
 faiss-cpu
 evaluate
 rouge-score
+sacrebleu
 mlflow
 fastapi
 uvicorn
