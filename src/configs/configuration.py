@@ -29,6 +29,7 @@ class ConfigurationManager:
             test_data_file=Path(config.test_data_file),
             # params
             columns_not_use=self.params.COLUMNS_NOT_USE,
+            columns_combined=self.params.COMBINED_COLUMNS,
             split_data=self.params.SPLIT_DATA
         )
     

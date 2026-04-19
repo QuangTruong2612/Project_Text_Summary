@@ -14,7 +14,7 @@ class ProcessedData:
             logger.info(f'Load data for training model successed! File data: {self.config.data_file}')
             return data 
         except Exception as e:
-            logger.debug(f"Error: {e}")
+            logger.error(f"Error loading data: {e}")
             raise e
     
     def processed_text(self, text: str) -> str:
@@ -35,6 +35,15 @@ class ProcessedData:
         columns = list(data.columns)
         for column in columns:
             data[column] = data[column].apply(self.processed_text)
+        
+        # combined columns
+        columns_combined = self.config.columns_combined
+
+        data['Combined'] = data[columns_combined].apply(
+            lambda row: '[SEP]'.join(row.astype(str)), axis=1
+        )
+
+        data = data.drop(columns=columns_combined)
             
         return data 
 
@@ -54,5 +63,5 @@ class ProcessedData:
             logger.info(f"Save file test data completed! Name file: {self.config.test_data_file}")
 
         except Exception as e:
-            logger.debug(f"Error: {e}")
+            logger.error(f"Error saving data: {e}")
             raise e

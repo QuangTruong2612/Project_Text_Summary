@@ -8,6 +8,7 @@ class DataProcessedConfig:
     train_data_file: Path
     test_data_file: Path
     columns_not_use: list[str]
+    columns_combined: list[str]
     split_data: list[float]
 
 @dataclass(frozen=True)
