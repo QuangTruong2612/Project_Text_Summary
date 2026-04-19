@@ -49,7 +49,7 @@ async def serve_ui():
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f9fafb; color: #333; }
             h1 { color: #2563eb; text-align: center; }
             .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-            textarea { width: 100%; height: 200px; padding: 15px; margin-top: 10px; border: 1px solid #cbd5e1; border-radius: 6px; resize: vertical; font-size: 16px; box-sizing: border-box; }
+            input[type="url"] { width: 100%; padding: 12px 15px; margin-top: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
             input[type="number"] { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100px; }
             button { background-color: #2563eb; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; width: 100%; transition: background-color 0.3s; }
             button:hover { background-color: #1d4ed8; }
@@ -65,7 +65,7 @@ async def serve_ui():
             <input type="number" id="maxLength" value="128" min="10" max="500">
             <br>
             
-            <textarea id="inputText" placeholder="Dán đoạn văn bản cần tóm tắt vào đây..."></textarea>
+            <input type="url" id="inputText" placeholder="Dán link bài báo vào đây (VD: https://vnexpress.net/...)">
             
             <button id="submitBtn" onclick="runInference()">⚡ Chạy Mô Hình</button>
             
@@ -75,13 +75,13 @@ async def serve_ui():
 
         <script>
             async function runInference() {
-                const text = document.getElementById('inputText').value;
+                const text = document.getElementById('inputText').value.trim();
                 const maxLength = document.getElementById('maxLength').value;
                 const resultDiv = document.getElementById('result');
                 const btn = document.getElementById('submitBtn');
 
-                if (!text.trim()) {
-                    alert("⚠️ Vui lòng nhập văn bản!");
+                if (!text) {
+                    alert("⚠️ Vui lòng nhập URL bài báo!");
                     return;
                 }
 
@@ -98,7 +98,7 @@ async def serve_ui():
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            text: text,
+                            url: text,
                             max_length: parseInt(maxLength)
                         })
                     });
@@ -126,7 +126,7 @@ async def serve_ui():
     return HTMLResponse(content=html_content, status_code=200)
 
 class SummaryRequest(BaseModel):
-    text: str
+    url: str
     max_length: int = 128
 
 class SummaryResponse(BaseModel):
@@ -134,13 +134,13 @@ class SummaryResponse(BaseModel):
 
 @app.post("/predict", response_model=SummaryResponse)
 async def predict_summary(request: SummaryRequest):
-    if not request.text or len(request.text.strip()) == 0:
+    if not request.url or len(request.url.strip()) == 0:
         raise HTTPException(status_code=400, detail="Văn bản đầu vào không được để trống")
     
     try:
         # Lấy model đã load sẵn từ bộ nhớ và chạy dự đoán
         model_pipeline = ml_models["summarizer"]
-        result = model_pipeline.predict(text=request.text, max_length=request.max_length)
+        result = model_pipeline.predict(url=request.url, max_length=request.max_length)
         
         return SummaryResponse(summary=result)
     

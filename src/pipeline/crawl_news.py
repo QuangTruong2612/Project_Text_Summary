@@ -13,65 +13,57 @@ class CrawlNews:
             'Referer': 'https://www.google.com/'
         }
 
-    def crawl(self, url: str) -> dict:
+    def _get_text(self, soup: BeautifulSoup, selector: str) -> str:
+        """Trả về text của selector đầu tiên tìm được, hoặc chuỗi rỗng."""
+        tag = soup.select_one(selector)
+        return tag.get_text(strip=True) if tag else ''
+
+    def crawl(self, url: str) -> dict | None:
         try:
             response = requests.get(url, headers=self.headers, timeout=10)
-            response.encoding = 'utf-8' 
+            response.encoding = 'utf-8'
             if response.status_code != 200:
                 return None
 
-            soup = BeautifulSoup(response.text, 'html.parser')
             domain = urllib.parse.urlparse(url).netloc
             if domain not in SITE_CONFIGS:
-                print(f"Domain {domain} not supported.")
+                print(f"Domain '{domain}' not supported.")
                 return None
-        
+
+            soup = BeautifulSoup(response.text, 'html.parser')
             config = SITE_CONFIGS[domain]
 
-            # ========== GET TITLE ==========
-            title = soup.select_one(config['title']).get_text(strip=True) if soup.select_one(config['title']) else ''
+            # ========== TITLE ==========
+            title = self._get_text(soup, config['title'])
 
-            # ========== GET PUBLISHED DATE ==========
-            published_date = soup.select_one(config['published-date']).get_text(strip=True) if soup.select_one(config['published-date']) else ''
+            # ========== CATEGORY ==========
+            category = self._get_text(soup, config['category'])
 
-            # ========== GET DESCRIPTION ==========
-            description_tag = soup.select_one(config['description'])
-            description = description_tag.get_text(strip=True) if description_tag else ''
+            # ========== DESCRIPTION ==========
+            description = self._get_text(soup, config['description'])
 
-            # ========== GET LOCATION ==========
-            if 'location' in config:
-                location_tag = soup.select_one(config['location'])
-                location = location_tag.get_text(strip=True) if location_tag else ''
-                description = description.replace(location, '').strip() if location else description
-            else:
-                location = ''
-
-            # ========== GET CONTENT (Đã sửa để lấy nhiều thẻ p.Normal) ==========
-            content_tags = soup.select(config['content']) # Sử dụng select() thay vì select_one()
-            content_text = ""
+            # ========== CONTENT ==========
+            content_tags = soup.select(config['content'])
+            content_text = ''
             if content_tags:
                 texts = []
                 for tag in content_tags:
                     # Xóa các tag rác bên trong mỗi đoạn
                     for trash in tag.select('table, figure, div.z-news-mini, .more-news'):
                         trash.decompose()
-                    
                     # Giữ lại text trong thẻ <a>
                     for a in tag.find_all('a'):
                         a.unwrap()
-                    
                     texts.append(tag.get_text(strip=True))
-                
-                # Nối các đoạn văn lại với nhau
-                content_text = "\n".join(texts)
-                
+                content_text = '\n'.join(texts)
+
             return {
                 'title': title,
-                'location': location,
-                'published_date': published_date,
+                'category': category,
                 'description': description,
-                'content': content_text
+                'content': content_text,
             }
+
         except Exception as e:
             print(f"Error crawling {url}: {e}")
             return None
