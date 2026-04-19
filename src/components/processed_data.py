@@ -26,10 +26,10 @@ class ProcessedData:
         data = self.load_data()
 
         # processed null
-        data = data.dropna(ignore_index=True)
+        data.dropna(inplace=True)
 
         # drop columns not use
-        data = data.drop(columns=self.config.columns_not_use, inplace=True)
+        data.drop(columns=self.config.columns_not_use, inplace=True)
 
         # get columns use
         columns = list(data.columns)
@@ -38,7 +38,6 @@ class ProcessedData:
             
         return data 
 
-    @staticmethod
     def save_data(self, data: pd.DataFrame):
         try:
             train_size, test_size = self.config.split_data
