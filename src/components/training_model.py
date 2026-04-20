@@ -26,8 +26,8 @@ class TrainingModel:
         self.compute_metrics = self._compute_multiple_metrics
 
     def _compute_multiple_metrics(self, eval_pred):
-        rouge_result = compute_rouge_score(self.tokenizer, eval_pred)
-        bleu_result = compute_bleu_score(self.tokenizer, eval_pred)
+        rouge_results = compute_rouge_score(self.tokenizer, eval_pred)
+        bleu_results = compute_bleu_score(self.tokenizer, eval_pred)
 
         return {
             "rouge1": round(rouge_results["rouge1"], 4),
