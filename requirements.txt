@@ -32,5 +32,6 @@ dagshub
 dvc
 dvc-s3
 awscli
+sentencepiece
 
 -e .

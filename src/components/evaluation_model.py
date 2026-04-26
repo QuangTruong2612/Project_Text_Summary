@@ -23,7 +23,7 @@ class EvaluationModel:
         self.device = config.device
 
         self.model_new = AutoModelForSeq2SeqLM.from_pretrained(config.model_path).to(self.device)
-        self.tokenizer_new = AutoTokenizer.from_pretrained(config.tokenizer_path)
+        self.tokenizer_new = AutoTokenizer.from_pretrained(config.tokenizer_path, use_fast=False)
 
         self.client = MlflowClient()
 

@@ -22,7 +22,7 @@ class TrainingModel:
     def __init__(self, config: TrainingModelConfig):
         self.config = config
         self.model = AutoModelForSeq2SeqLM.from_pretrained(config.model_checkpoint)
-        self.tokenizer = AutoTokenizer.from_pretrained(config.model_checkpoint)
+        self.tokenizer = AutoTokenizer.from_pretrained(config.model_checkpoint, use_fast=False)
         self.compute_metrics = self._compute_multiple_metrics
 
     def _compute_multiple_metrics(self, eval_pred):
