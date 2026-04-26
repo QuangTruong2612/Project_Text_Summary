@@ -1,7 +1,7 @@
 torch
 torchvision
-transformers
-tokenizers
+transformers==4.35.2
+tokenizers==0.14.1
 sentencepiece
 datasets
 accelerate
