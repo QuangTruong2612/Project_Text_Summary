@@ -7,4 +7,4 @@ __pycache__/
 .vscode/
 artifacts/*
 Project_Text_Summary.egg-info/
-.venv/
+.venv/*

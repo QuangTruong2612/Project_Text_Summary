@@ -67,7 +67,7 @@ class TrainingModel:
             data_train, data_eval = self.pre_data()
 
             training_args = Seq2SeqTrainingArguments(
-                output_dir="./results_summary",
+                output_dir=f"{self.config.root_dir}/results_summary",
                 eval_strategy="epoch",
                 learning_rate=float(self.config.learning_rate),
                 logging_strategy="steps",
@@ -78,6 +78,8 @@ class TrainingModel:
                 num_train_epochs=self.config.epochs,
                 predict_with_generate=True,
                 fp16=True,
+                save_strategy="epoch", 
+                save_total_limit=1,
                 report_to="mlflow",
             )
 

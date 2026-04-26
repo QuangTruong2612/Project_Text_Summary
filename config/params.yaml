@@ -1,8 +1,8 @@
 COLUMNS_NOT_USE: ["URL", "Tags", "Author(s)", "Date"]
 COMBINED_COLUMNS: ["Title", "Contents", "Category"]
 
-MODEL_NAME: "Long_Transformer_Encoder_Decoder"
-MODEL_CHECKPOINT: "allenai/led-base-16384"
+MODEL_NAME: "VIT_5"
+MODEL_CHECKPOINT: "VietAI/vit5-base"
 
 # Params training model
 SPLIT_DATA: [0.8, 0.2]
