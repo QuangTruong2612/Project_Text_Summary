@@ -4,7 +4,7 @@ transformers==4.35.2
 tokenizers==0.14.1
 sentencepiece
 pathspec==0.10.3
-huggingface_hub==0.22.2
+huggingface_hub==0.17.3
 datasets
 accelerate
 underthesea
