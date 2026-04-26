@@ -68,7 +68,7 @@ class TrainingModel:
 
             training_args = Seq2SeqTrainingArguments(
                 output_dir=f"{self.config.root_dir}/results_summary",
-                eval_strategy="epoch",
+                evaluation_strategy="epoch",
                 learning_rate=float(self.config.learning_rate),
                 logging_strategy="steps",
                 logging_steps=10,
@@ -88,7 +88,7 @@ class TrainingModel:
                 args=training_args,
                 train_dataset=data_train,
                 eval_dataset=data_eval,
-                processing_class=self.tokenizer,
+                tokenizer=self.tokenizer,
                 data_collator=data_collator,
                 compute_metrics=self.compute_metrics,
             )
