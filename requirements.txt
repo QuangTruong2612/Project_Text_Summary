@@ -3,6 +3,7 @@ torchvision
 transformers==4.35.2
 tokenizers==0.14.1
 sentencepiece
+pathspec==0.10.3
 datasets
 accelerate
 underthesea
