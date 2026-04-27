@@ -6,7 +6,5 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
+RUN pip install -r requirements.txt --root-user-action=ignore
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
